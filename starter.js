@@ -1,13 +1,14 @@
 var penguinPromise = d3.json("classData.json");
     
-    var successFCN = function(penguin)
+    var successFCN = function(penguins)
         {
-            console.log("Here are the penguins", penguin);
-            drawTable(penguin);
+            console.log("Here are the penguins", penguins);
+            sortPenguins(penguins);
+            drawTable(penguins);
         }
-    var failureFCN = function(penguin)
+    var failureFCN = function(penguins)
         {
-            console.log("Error", penguin);
+            console.log("Error", penguins);
         }
 
 penguinPromise.then(successFCN, failureFCN);
@@ -74,4 +75,35 @@ var drawTable = function(penguin)
             return penguin.final[0].grade
         })
         
+    }
+
+var comparePenguins = function(penguin1, penguin2)
+    {
+        if(penguin1.final[0].grade>penguin2.final[0].grade)
+                {
+                    return -1
+                }
+    else if(penguin1.final[0].grade==penguin2.final[0].grade)
+                {
+                    return 0
+                }
+        else 
+                {
+                    return 1
+                }
+    }
+var sortPenguins = function(penguins)
+    {
+        d3.select("#final")
+            .on("click", function()
+{
+            penguins.sort(comparePenguins)
+            console.log("sorted")
+            d3.select("tbody")
+            .selectAll("*")
+            .remove();
+            drawTable(penguins);
+            
+})
+            
     }
